@@ -426,10 +426,10 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
             }
             $data[] = sprintf("    '%s' => array(", $pluginName);
 
-            if (!preg_match('{^[a-zA-Z0-9]+$}', $installerName)) {
+            if (!preg_match('{^[a-zA-Z0-9_.-]+$}', $installerName)) {
                 throw new \InvalidArgumentException(
                     "The installer name '" . $installerName . "' is invalid, "
-                    . "it must be alphanumeric, matching: [a-zA-Z0-9]+"
+                    . "it must be alphanumeric, matching: [a-zA-Z0-9_.-]+"
                 );
             }
             $data[] = sprintf("        'installerName' => '%s',", $installerName);
