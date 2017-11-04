@@ -1,9 +1,10 @@
 <?php
 /**
  * This file is part of Pico. It's copyrighted by the contributors recorded
- * in the version control history of the file, available from its original
- * location <https://github.com/picocms/composer-installer/blob/master/src/
- * Installer/PluginInstaller.php>
+ * in the version control history of the file, available from the following
+ * original location:
+ *
+ * <https://github.com/picocms/composer-installer/blob/master/src/Installer/PluginInstaller.php>
  *
  * SPDX-License-Identifier: MIT
  * License-Filename: LICENSE
