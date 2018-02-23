@@ -7,7 +7,7 @@ Pico is a stupidly simple, blazing fast, flat file CMS. See http://picocms.org/ 
 
 This Composer plugin is responsible for installing Pico plugins and themes using the Composer package manager (i.e. by running `composer install` on the command line). It assumes responsibility for packages that identify as `{ "type": "pico-plugin" }` and `{ "type": "pico-theme" }` in their `composer.json` and instructs Composer to install these packages to Pico's `plugins/` and `themes/` folder respectively.
 
-The installer furthermore creates a `vendor/pico-plugin.php` with a list of all installed Pico plugins and the corresponding PHP classes (requires the `post-autoload-dump` event, see "Install" section below). This file is used by Pico 2.0+ to load such plugins at runtime and even allows you to completely disable filesystem-based loading of plugins.
+The installer furthermore creates a `vendor/pico-plugin.php` with a list of all installed Pico plugins and the corresponding PHP classes (requires the `post-autoload-dump` event, see "Install" section below). This file is used by Pico 2.0+ to load such plugins at runtime and even allows you to completely disable filesystem-based loading of plugins. Just make sure to add a proper autoload section to your `composer.json` - otherwise Pico won't find your plugin's PHP class.
 
 The installer's behavior is fully configurable in both the plugin's and themes's `composer.json`, and the root package's `composer.json` (see the "Usage" section below).
 
