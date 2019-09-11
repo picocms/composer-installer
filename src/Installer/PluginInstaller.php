@@ -264,7 +264,7 @@ class PluginInstaller extends LibraryInstaller
         // 1. root package
         $rootPackageExtra = $rootPackage ? $rootPackage->getExtra() : null;
         if (!empty($rootPackageExtra[$packageType])) {
-            $classNames = (array) $this->mapRootExtra($rootPackageExtra[$packageType], $packagePrettyName);
+            $classNames = (array) static::mapRootExtra($rootPackageExtra[$packageType], $packagePrettyName);
         }
 
         // 2. package
@@ -308,7 +308,7 @@ class PluginInstaller extends LibraryInstaller
 
         $rootPackageExtra = $rootPackage ? $rootPackage->getExtra() : null;
         if (!empty($rootPackageExtra['installer-name'])) {
-            $installName = $this->mapRootExtra($rootPackageExtra['installer-name'], $packagePrettyName);
+            $installName = static::mapRootExtra($rootPackageExtra['installer-name'], $packagePrettyName);
         }
 
         if (!$installName) {
