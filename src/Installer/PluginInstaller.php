@@ -85,10 +85,10 @@ class PluginInstaller extends LibraryInstaller
     /**
      * Initializes Pico plugin and theme installer
      *
-     * This method tries to automatically register the `post-autoload-dump`
-     * script ({@see static::postAutoloadDump()}), if it wasn't explicitly set
-     * already. If this isn't possible, the autoload dump event consequently
-     * can't be used ({@see static::checkAutoloadDump()}).
+     * This method tries to register the `post-autoload-dump` script
+     * ({@see PluginInstaller::postAutoloadDump()}), if it wasn't explicitly
+     * set already. If this isn't possible, the autoload dump event can't be
+     * used ({@see PluginInstaller::checkAutoloadDump()}).
      *
      * @param IOInterface     $io
      * @param Composer        $composer
@@ -127,9 +127,9 @@ class PluginInstaller extends LibraryInstaller
     /**
      * Checks whether the autoload dump event is used
      *
-     * Using the autoload dump event is synonymous with creating the
-     * `pico-plugin.php` in Composer's vendor dir. Plugins are nevertheless
-     * installed to Pico's `plugins/` dir ({@see static::getInstallPath()}).
+     * Using the autoload dump event will always create `pico-plugin.php` in
+     * Composer's vendor dir. Plugins are nevertheless installed to Pico's
+     * `plugins/` dir ({@see PluginInstaller::getInstallPath()}).
      *
      * The autoload dump event is used when the root package is a project and
      * explicitly requires this composer installer.
@@ -222,7 +222,7 @@ class PluginInstaller extends LibraryInstaller
      * package's or the plugin package's `composer.json`, or are derived
      * implicitly from the plugin's installer name. The installer name is, for
      * its part, either specified explicitly, or derived implicitly from the
-     * plugin package's name ({@see static::getInstallName()}).
+     * plugin package's name ({@see PluginInstaller::getInstallName()}).
      *
      * 1. Using the "pico-plugin" extra in the root package's `composer.json`:
      *    ```yaml
@@ -235,8 +235,8 @@ class PluginInstaller extends LibraryInstaller
      *    }
      *    ```
      *
-     *    Besides matching the exact package name, you can also use the
-     *    `vendor:` or `name:` prefixes. See {@see static::mapRootExtra()}.
+     *    Besides matching exact package names, you can also use the prefixes
+     *    `vendor:` or `name:` ({@see PluginInstaller::mapRootExtra()}).
      *
      * 2. Using the "pico-plugin" extra in the package's `composer.json`:
      *    ```yaml
@@ -247,7 +247,7 @@ class PluginInstaller extends LibraryInstaller
      *    }
      *    ```
      *
-     * 3. Using the installer name. See {@see static::getInstallName()}.
+     * 3. Using the installer name ({@see PluginInstaller::getInstallName()}).
      *
      * @param PackageInterface      $package
      * @param PackageInterface|null $rootPackage
@@ -293,7 +293,7 @@ class PluginInstaller extends LibraryInstaller
      * name.
      *
      * Install names are determined the same way as plugin class names. See
-     * {@see static::getPluginClassNames()} for details.
+     * {@see PluginInstaller::getPluginClassNames()} for details.
      *
      * @param PackageInterface      $package
      * @param PackageInterface|null $rootPackage
