@@ -162,7 +162,6 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      * a mapping of Composer package to Pico plugin class names.
      *
      * @param \Composer\Script\Event $event
-     * @return void
      */
     public static function postAutoloadDump(\Composer\Script\Event $event)
     {
@@ -412,7 +411,6 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      * @param  string $pluginConfig
      * @param  array  $plugins
      * @param  array  $pluginClassNames
-     * @return void
      */
     public static function writePluginConfig($pluginConfig, array $plugins, array $pluginClassNames)
     {
