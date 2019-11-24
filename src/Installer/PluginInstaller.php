@@ -12,6 +12,15 @@
 
 namespace Pico\Composer\Installer;
 
+use Composer\Composer;
+use Composer\Installer\BinaryInstaller;
+use Composer\Installer\LibraryInstaller;
+use Composer\IO\IOInterface;
+use Composer\Package\AliasPackage;
+use Composer\Package\PackageInterface;
+use Composer\Script\Event;
+use Composer\Util\Filesystem;
+
 /**
  * Pico plugin and theme installer
  *
@@ -26,7 +35,7 @@ namespace Pico\Composer\Installer;
  * @license http://opensource.org/licenses/MIT The MIT License
  * @version 1.0
  */
-class PluginInstaller extends \Composer\Installer\LibraryInstaller
+class PluginInstaller extends LibraryInstaller
 {
     /**
      * Package name of this composer installer
@@ -52,7 +61,7 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
     /**
      * Composer root package
      *
-     * @var \Composer\Package\PackageInterface|null
+     * @var PackageInterface|null
      */
     protected $rootPackage;
 
@@ -76,23 +85,23 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
     /**
      * Initializes Pico plugin and theme installer
      *
-     * This method tries to automatically register the `post-autoload-dump`
-     * script ({@see static::postAutoloadDump()}), if it wasn't explicitly set
-     * already. If this isn't possible, the autoload dump event consequently
-     * can't be used ({@see static::checkAutoloadDump()}).
+     * This method tries to register the `post-autoload-dump` script
+     * ({@see PluginInstaller::postAutoloadDump()}), if it wasn't explicitly
+     * set already. If this isn't possible, the autoload dump event can't be
+     * used ({@see PluginInstaller::checkAutoloadDump()}).
      *
-     * @param \Composer\IO\IOInterface            $io
-     * @param \Composer\Composer                  $composer
-     * @param string                              $type
-     * @param \Composer\Util\Filesystem           $filesystem
-     * @param \Composer\Installer\BinaryInstaller $binaryInstaller
+     * @param IOInterface     $io
+     * @param Composer        $composer
+     * @param string          $type
+     * @param Filesystem      $filesystem
+     * @param BinaryInstaller $binaryInstaller
      */
     public function __construct(
-        \Composer\IO\IOInterface $io,
-        \Composer\Composer $composer,
+        IOInterface $io,
+        Composer $composer,
         $type = 'library',
-        \Composer\Util\Filesystem $filesystem = null,
-        \Composer\Installer\BinaryInstaller $binaryInstaller = null
+        Filesystem $filesystem = null,
+        BinaryInstaller $binaryInstaller = null
     ) {
         parent::__construct($io, $composer, $type, $filesystem, $binaryInstaller);
         $this->rootPackage = static::getRootPackage($this->composer);
@@ -118,17 +127,18 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
     /**
      * Checks whether the autoload dump event is used
      *
-     * Using the autoload dump event is synonymous with creating the
-     * `pico-plugin.php` in Composer's vendor dir. Plugins are nevertheless
-     * installed to Pico's `plugins/` dir ({@see static::getInstallPath()}).
+     * Using the autoload dump event will always create `pico-plugin.php` in
+     * Composer's vendor dir. Plugins are nevertheless installed to Pico's
+     * `plugins/` dir ({@see PluginInstaller::getInstallPath()}).
      *
      * The autoload dump event is used when the root package is a project and
      * explicitly requires this composer installer.
      *
-     * @param  \Composer\Composer $composer
+     * @param Composer $composer
+     *
      * @return bool
      */
-    public static function checkAutoloadDump(\Composer\Composer $composer)
+    public static function checkAutoloadDump(Composer $composer)
     {
         if (static::$useAutoloadDump === null) {
             static::$useAutoloadDump = false;
@@ -161,10 +171,9 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      * Recreates the `pico-plugin.php` in Composer's vendor dir, containing
      * a mapping of Composer package to Pico plugin class names.
      *
-     * @param \Composer\Script\Event $event
-     * @return void
+     * @param Event $event
      */
-    public static function postAutoloadDump(\Composer\Script\Event $event)
+    public static function postAutoloadDump(Event $event)
     {
         $io = $event->getIO();
         $composer = $event->getComposer();
@@ -176,7 +185,7 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
             if (file_exists($pluginConfig) || is_link($pluginConfig)) {
                 $io->write('<info>Deleting Pico plugins file</info>');
 
-                $filesystem = new \Composer\Util\Filesystem();
+                $filesystem = new Filesystem();
                 $filesystem->unlink($pluginConfig);
             }
 
@@ -207,29 +216,13 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
     }
 
     /**
-     * Returns all Pico plugins that should be loaded using pico-plugin.php
-     *
-     * Returns a associative array of plugin class names, indexed by package
-     * name.
-     *
-     * @param  \Composer\Composer $composer
-     * @param  \Composer\Package\PackageInterface[] $packages
-     * @return array
-     */
-    public static function getPluginConfigPlugins(\Composer\Composer $composer, array $packages)
-    {
-
-        return $plugins;
-    }
-
-    /**
      * Determines the plugin class names of a package
      *
      * Plugin class names are either specified explicitly in either the root
      * package's or the plugin package's `composer.json`, or are derived
      * implicitly from the plugin's installer name. The installer name is, for
      * its part, either specified explicitly, or derived implicitly from the
-     * plugin package's name ({@see static::getInstallName()}).
+     * plugin package's name ({@see PluginInstaller::getInstallName()}).
      *
      * 1. Using the "pico-plugin" extra in the root package's `composer.json`:
      *    ```yaml
@@ -242,8 +235,8 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      *    }
      *    ```
      *
-     *    Besides matching the exact package name, you can also use the
-     *    `vendor:` or `name:` prefixes. See {@see static::mapRootExtra()}.
+     *    Besides matching exact package names, you can also use the prefixes
+     *    `vendor:` or `name:` ({@see PluginInstaller::mapRootExtra()}).
      *
      * 2. Using the "pico-plugin" extra in the package's `composer.json`:
      *    ```yaml
@@ -254,26 +247,24 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      *    }
      *    ```
      *
-     * 3. Using the installer name. See {@see static::getInstallName()}.
+     * 3. Using the installer name ({@see PluginInstaller::getInstallName()}).
      *
-     * @param  \Composer\Package\PackageInterface      $package
-     * @param  \Composer\Package\PackageInterface|null $rootPackage
+     * @param PackageInterface      $package
+     * @param PackageInterface|null $rootPackage
+     *
      * @return string[]
      */
-    public static function getPluginClassNames(
-        \Composer\Package\PackageInterface $package,
-        \Composer\Package\PackageInterface $rootPackage = null
-    ) {
+    public static function getPluginClassNames(PackageInterface $package, PackageInterface $rootPackage = null)
+    {
         $packageType = $package->getType();
         $packagePrettyName = $package->getPrettyName();
-        $packageName = $package->getName();
 
         $classNames = array();
 
         // 1. root package
         $rootPackageExtra = $rootPackage ? $rootPackage->getExtra() : null;
         if (!empty($rootPackageExtra[$packageType])) {
-            $classNames = (array) $this->mapRootExtra($rootPackageExtra[$packageType], $packagePrettyName);
+            $classNames = (array) static::mapRootExtra($rootPackageExtra[$packageType], $packagePrettyName);
         }
 
         // 2. package
@@ -302,23 +293,22 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      * name.
      *
      * Install names are determined the same way as plugin class names. See
-     * {@see static::getPluginClassNames()} for details.
+     * {@see PluginInstaller::getPluginClassNames()} for details.
      *
-     * @param  \Composer\Package\PackageInterface      $package
-     * @param  \Composer\Package\PackageInterface|null $rootPackage
+     * @param PackageInterface      $package
+     * @param PackageInterface|null $rootPackage
+     *
      * @return string
      */
-    public static function getInstallName(
-        \Composer\Package\PackageInterface $package,
-        \Composer\Package\PackageInterface $rootPackage = null
-    ) {
+    public static function getInstallName(PackageInterface $package, PackageInterface $rootPackage = null)
+    {
         $packagePrettyName = $package->getPrettyName();
         $packageName = $package->getName();
         $installName = null;
 
         $rootPackageExtra = $rootPackage ? $rootPackage->getExtra() : null;
         if (!empty($rootPackageExtra['installer-name'])) {
-            $installName = $this->mapRootExtra($rootPackageExtra['installer-name'], $packagePrettyName);
+            $installName = static::mapRootExtra($rootPackageExtra['installer-name'], $packagePrettyName);
         }
 
         if (!$installName) {
@@ -338,7 +328,8 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      * package name to StudlyCase and removing "-plugin" or "-theme" suffixes,
      * if present.
      *
-     * @param  string $packageName
+     * @param string $packageName
+     *
      * @return string
      */
     protected static function guessInstallName($packageName)
@@ -367,8 +358,9 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
      * or `name:` prefixes to match all packages of a specific vendor resp.
      * all packages with a specific name, no matter the vendor.
      *
-     * @param  mixed[] $packageExtra
-     * @param  string  $packagePrettyName
+     * @param mixed[] $packageExtra
+     * @param string  $packagePrettyName
+     *
      * @return mixed
      */
     protected static function mapRootExtra(array $packageExtra, $packagePrettyName)
@@ -398,7 +390,8 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
     /**
      * Returns the path to the pico-plugin.php in Composer's vendor dir
      *
-     * @param  string $vendorDir
+     * @param string $vendorDir
+     *
      * @return string
      */
     protected static function getPluginConfig($vendorDir)
@@ -409,10 +402,9 @@ class PluginInstaller extends \Composer\Installer\LibraryInstaller
     /**
      * Rewrites the pico-plugin.php in Composer's vendor dir
      *
-     * @param  string $pluginConfig
-     * @param  array  $plugins
-     * @param  array  $pluginClassNames
-     * @return void
+     * @param string $pluginConfig
+     * @param array  $plugins
+     * @param array  $pluginClassNames
      */
     public static function writePluginConfig($pluginConfig, array $plugins, array $pluginClassNames)
     {
@@ -478,14 +470,15 @@ PHP;
     /**
      * Returns the root package of a composer instance
      *
-     * @param  \Composer\Composer $composer
-     * @return \Composer\Package\PackageInterface
+     * @param Composer $composer
+     *
+     * @return PackageInterface
      */
-    protected static function getRootPackage(\Composer\Composer $composer)
+    protected static function getRootPackage(Composer $composer)
     {
         $rootPackage = $composer->getPackage();
         if ($rootPackage) {
-            while ($rootPackage instanceof \Composer\Package\AliasPackage) {
+            while ($rootPackage instanceof AliasPackage) {
                 $rootPackage = $rootPackage->getAliasOf();
             }
         }
@@ -496,7 +489,8 @@ PHP;
     /**
      * Decides if the installer supports installing the given package type
      *
-     * @param  string $packageType
+     * @param string $packageType
+     *
      * @return bool
      */
     public function supports($packageType)
@@ -515,10 +509,11 @@ PHP;
      * "pico-plugin-dir" resp. "pico-theme-dir" extra in the root package's
      * `composer.json`.
      *
-     * @param  \Composer\Package\PackageInterface $package
+     * @param PackageInterface $package
+     *
      * @return string
      */
-    public function getInstallPath(\Composer\Package\PackageInterface $package)
+    public function getInstallPath(PackageInterface $package)
     {
         $packageType = $package->getType();
 
@@ -530,7 +525,8 @@ PHP;
     /**
      * Returns and initializes the installation directory of the given type
      *
-     * @param  string $packageType
+     * @param string $packageType
+     *
      * @return string
      */
     protected function initializeInstallDir($packageType)
