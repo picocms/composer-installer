@@ -3,7 +3,7 @@ Pico Composer Installer
 
 This is the repository of Pico's official [Composer][] installer.
 
-Pico is a stupidly simple, blazing fast, flat file CMS. See http://picocms.org/ for more info.
+Pico is a stupidly simple, blazing fast, flat file CMS. See https://picocms.org/ for more info.
 
 This Composer plugin is responsible for installing Pico plugins and themes using the Composer package manager (i.e. by running `composer install` on the command line). It assumes responsibility for packages that identify as `{ "type": "pico-plugin" }` and `{ "type": "pico-theme" }` in their `composer.json` and instructs Composer to install these packages to Pico's `plugins/` and `themes/` folder respectively.
 
