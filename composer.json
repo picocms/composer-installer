@@ -3,7 +3,7 @@
     "type": "composer-plugin",
     "description": "A composer plugin responsible for installing plugins and themes for Pico, a stupidly simple, blazing fast, flat file CMS.",
     "keywords": [ "pico", "picocms", "pico-cms", "picocms-plugin", "picocms-theme", "picocms-installer", "composer", "composer-plugin", "composer-installer" ],
-    "homepage": "http://picocms.org/",
+    "homepage": "https://picocms.org/",
     "license": "MIT",
     "authors": [
         {
@@ -13,7 +13,7 @@
         },
         {
             "name": "The Pico Community",
-            "homepage": "http://picocms.org/"
+            "homepage": "https://picocms.org/"
         },
         {
             "name": "Contributors",

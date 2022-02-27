@@ -22,11 +22,11 @@ use Composer\Plugin\PluginInterface;
  * This Composer plugin registers Pico's plugin and theme installer. Pico is a
  * stupidly simple, blazing fast, flat file CMS.
  *
- * See <http://picocms.org/> for more info.
+ * See <https://picocms.org/> for more info.
  *
  * @author  Daniel Rudolf
- * @link    http://picocms.org
- * @license http://opensource.org/licenses/MIT The MIT License
+ * @link    https://picocms.org
+ * @license https://opensource.org/licenses/MIT The MIT License
  * @version 2.0
  */
 class Plugin implements PluginInterface
