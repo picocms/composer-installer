@@ -31,20 +31,48 @@ use Composer\Plugin\PluginInterface;
  */
 class Plugin implements PluginInterface
 {
-    /** @var Installer */
+    /**
+     * Instance of Pico's plugin and theme installer
+     *
+     * @var Installer|null
+     */
     private $installer;
 
+    /**
+     * Adds Pico's plugin and theme installer to Composer
+     *
+     * @param Composer    $composer
+     * @param IOInterface $io
+     *
+     * @return void
+     */
     public function activate(Composer $composer, IOInterface $io): void
     {
         $this->installer = new Installer($io, $composer);
         $composer->getInstallationManager()->addInstaller($this->installer);
     }
 
+    /**
+     * Removes Pico's plugin and theme installer from Composer
+     *
+     * @param Composer    $composer
+     * @param IOInterface $io
+     *
+     * @return void
+     */
     public function deactivate(Composer $composer, IOInterface $io): void
     {
         $composer->getInstallationManager()->removeInstaller($this->installer);
     }
 
+    /**
+     * Uninstalls the Composer plugin (no-op)
+     *
+     * @param Composer    $composer
+     * @param IOInterface $io
+     *
+     * @return void
+     */
     public function uninstall(Composer $composer, IOInterface $io): void
     {
     }
