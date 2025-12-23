@@ -91,18 +91,18 @@ class Installer extends LibraryInstaller
      * set already. If this isn't possible, the autoload dump event can't be
      * used ({@see Installer::checkAutoloadDump()}).
      *
-     * @param IOInterface     $io
-     * @param Composer        $composer
-     * @param string|null     $type
-     * @param Filesystem      $filesystem
-     * @param BinaryInstaller $binaryInstaller
+     * @param IOInterface          $io
+     * @param Composer             $composer
+     * @param string|null          $type
+     * @param Filesystem|null      $filesystem
+     * @param BinaryInstaller|null $binaryInstaller
      */
     public function __construct(
         IOInterface $io,
         Composer $composer,
         ?string $type = 'library',
-        Filesystem $filesystem = null,
-        BinaryInstaller $binaryInstaller = null
+        ?Filesystem $filesystem = null,
+        ?BinaryInstaller $binaryInstaller = null
     ) {
         parent::__construct($io, $composer, $type, $filesystem, $binaryInstaller);
 
@@ -255,8 +255,10 @@ class Installer extends LibraryInstaller
      *
      * @return string[]
      */
-    public static function getPluginClassNames(PackageInterface $package, PackageInterface $rootPackage = null): array
-    {
+    public static function getPluginClassNames(
+        PackageInterface $package,
+        ?PackageInterface $rootPackage = null
+    ): array {
         $packageType = $package->getType();
         $packagePrettyName = $package->getPrettyName();
 
@@ -301,7 +303,7 @@ class Installer extends LibraryInstaller
      *
      * @return string
      */
-    public static function getInstallName(PackageInterface $package, PackageInterface $rootPackage = null): string
+    public static function getInstallName(PackageInterface $package, ?PackageInterface $rootPackage = null): string
     {
         $packagePrettyName = $package->getPrettyName();
         $packageName = $package->getName();
