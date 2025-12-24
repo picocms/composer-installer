@@ -19,14 +19,14 @@ Install
 If you've used Pico's official composer starter project ([`picocms/pico-composer`][pico-composer]), your website's `composer.json` (the "root package") already depends on `picocms/composer-installer`. If this isn't true, run the following to load it from [Packagist.org][]:
 
 ```shell
-$ composer require picocms/composer-installer:^1.0
+$ composer require picocms/composer-installer:^2.0
 ```
 
 The Composer plugin tries to automatically register itself for the `post-autoload-dump` event. This is a prerequisite for the installer to create a `vendor/pico-plugin.php`. If the installer was successful in doing so, you'll see the following three lines when running `composer install` or `composer update`:
 
 ```
 Generating autoload files
-> Pico\Composer\Installer\PluginInstaller::postAutoloadDump
+> picocms\\ComposerInstaller\\Installer::postAutoloadDump
 Creating Pico plugins file
 ```
 
@@ -36,7 +36,7 @@ If you see just the first two lines and not the third one, please make sure that
 {
     "scripts": {
         "post-autoload-dump": [
-            "Pico\\Composer\\Installer\\PluginInstaller::postAutoloadDump"
+            "picocms\\ComposerInstaller\\Installer::postAutoloadDump"
         ]
     }
 }
