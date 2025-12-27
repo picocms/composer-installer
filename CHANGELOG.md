@@ -8,6 +8,27 @@ Pico Composer Installer Changelog
           refer to both the UPGRADE and NEWS sections of the docs for more
           details.
 
+### Version 2.0.2
+Released: -
+
+```
+* [Fixed] Update README.md for v2.0
+```
+
+### Version 2.0.1
+Released: 2025-12-23
+
+```
+* [Fixed] Fix implicit nullable deprecation
+```
+
+### Version 2.0.0
+Released: 2025-12-22
+
+```
+* [Changed] Update to a Composer 2.x plugin (no functional changes)
+```
+
 ### Version 1.0.1
 Released: 2019-11-24
 
